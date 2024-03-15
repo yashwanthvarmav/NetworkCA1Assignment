@@ -1,23 +1,23 @@
-- name: Setting up Docker Container using Apache with HTML Page 
-  hosts: target-machine #inventory 
+- name: Setting up Docker Container with Apache 
+  hosts: Target-Machine #inventory 
   become: true
 
   tasks:
-    - name: Deploy Docker
+    - name: Install Docker.io package
       package:
         name: docker.io
         state: present
       become: true
 
-    - name: Install Docker Python module and Dependiencies
+    - name: Install the Docker Python module and dependiencies
       pip:
         name: docker
 
-    - name: Retrive Apache Docker image
+    - name: Pull the Apache Docker image
       shell: docker pull httpd
       become: true
       
-    - name: copy content of the HTML page to the target machine
+    - name: copy the index.html file to the target machine
       copy:
         src: "index.html"
         dest: "/home/yashwanthvarmav2/Desktop/index.html"
