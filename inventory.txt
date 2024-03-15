@@ -1,0 +1,2 @@
+[target-machine]
+192.168.64.6 ansible_user=yashwanthvarmav2 ansible_become_pass=Yash@1999

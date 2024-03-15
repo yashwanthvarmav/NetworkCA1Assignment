@@ -1,0 +1,39 @@
+- name: Setting up Docker Container using Apache with HTML Page 
+  hosts: target-machine #inventory 
+  become: true
+
+  tasks:
+    - name: Deploy Docker
+      package:
+        name: docker.io
+        state: present
+      become: true
+
+    - name: Install Docker Python module and Dependiencies
+      pip:
+        name: docker
+
+    - name: Retrive Apache Docker image
+      shell: docker pull httpd
+      become: true
+      
+    - name: copy content of the HTML page to the target machine
+      copy:
+        src: "index.html"
+        dest: "/home/yashwanthvarmav2/Desktop/index.html"
+
+    - name: Subnet for Apache Networking
+      community.docker.docker_network:
+        name: custom_network
+        driver: bridge
+        ipam_config:
+          - subnet: "172.168.10.0/30"
+
+    - name: Run Apache web server using Docker container
+      community.docker.docker_container:
+        name: apache_container
+        image: httpd
+        ports:
+          - "172.168.10.1:80:80"
+        volumes: /home/yashwanthvarmav2/Desktop:/usr/local/apache2/htdocs/
+        state: started
